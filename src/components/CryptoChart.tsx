@@ -1,10 +1,14 @@
+
 import TradingViewWidget from 'react-tradingview-widget';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const CryptoChart = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="glass-card p-6 rounded-lg mb-8 animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">Bitcoin Price</h2>
+        <h2 className="text-xl font-semibold">{t("chart.bitcoin")}</h2>
       </div>
       <div className="h-[400px] w-full">
         <TradingViewWidget

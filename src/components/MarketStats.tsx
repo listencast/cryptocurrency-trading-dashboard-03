@@ -1,11 +1,15 @@
+
 import { ArrowUpIcon, ArrowDownIcon, TrendingUpIcon } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const MarketStats = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-fade-in">
       <div className="glass-card p-6 rounded-lg">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-muted-foreground">Market Cap</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">{t("market.cap")}</h3>
           <TrendingUpIcon className="w-4 h-4 text-success" />
         </div>
         <p className="text-2xl font-semibold mt-2">$2.1T</p>
@@ -17,7 +21,7 @@ const MarketStats = () => {
       
       <div className="glass-card p-6 rounded-lg">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-muted-foreground">24h Volume</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">{t("market.volume")}</h3>
           <TrendingUpIcon className="w-4 h-4 text-success" />
         </div>
         <p className="text-2xl font-semibold mt-2">$84.2B</p>
@@ -29,7 +33,7 @@ const MarketStats = () => {
       
       <div className="glass-card p-6 rounded-lg">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-muted-foreground">BTC Dominance</h3>
+          <h3 className="text-sm font-medium text-muted-foreground">{t("market.dominance")}</h3>
           <TrendingUpIcon className="w-4 h-4 text-warning" />
         </div>
         <p className="text-2xl font-semibold mt-2">42.1%</p>

@@ -1,5 +1,7 @@
+
 import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const fetchCryptoData = async () => {
   const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&page=1&sparkline=false');
@@ -10,6 +12,7 @@ const fetchCryptoData = async () => {
 };
 
 const CryptoList = () => {
+  const { t } = useLanguage();
   const { data: cryptos, isLoading } = useQuery({
     queryKey: ['cryptos'],
     queryFn: fetchCryptoData,
@@ -22,15 +25,15 @@ const CryptoList = () => {
 
   return (
     <div className="glass-card rounded-lg p-6 animate-fade-in">
-      <h2 className="text-xl font-semibold mb-6">Top Cryptocurrencies</h2>
+      <h2 className="text-xl font-semibold mb-6">{t("crypto.list.title")}</h2>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="text-left text-sm text-muted-foreground">
-              <th className="pb-4">Name</th>
-              <th className="pb-4">Price</th>
-              <th className="pb-4">24h Change</th>
-              <th className="pb-4">Volume</th>
+              <th className="pb-4">{t("crypto.list.name")}</th>
+              <th className="pb-4">{t("crypto.list.price")}</th>
+              <th className="pb-4">{t("crypto.list.change")}</th>
+              <th className="pb-4">{t("crypto.list.volume")}</th>
             </tr>
           </thead>
           <tbody>

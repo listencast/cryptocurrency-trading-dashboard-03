@@ -1,5 +1,7 @@
+
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { useQuery } from "@tanstack/react-query";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const fetchBitcoinPrices = async () => {
   const response = await fetch(
@@ -15,6 +17,7 @@ const fetchBitcoinPrices = async () => {
 };
 
 const PortfolioCard = () => {
+  const { t } = useLanguage();
   const { data: priceData, isLoading } = useQuery({
     queryKey: ['bitcoinPrices'],
     queryFn: fetchBitcoinPrices,
@@ -24,7 +27,7 @@ const PortfolioCard = () => {
   if (isLoading) {
     return (
       <div className="glass-card p-6 rounded-lg mb-8 animate-fade-in">
-        <h2 className="text-xl font-semibold mb-6">Bitcoin Performance</h2>
+        <h2 className="text-xl font-semibold mb-6">{t("chart.performance")}</h2>
         <div className="w-full h-[200px] flex items-center justify-center">
           <span className="text-muted-foreground">Loading...</span>
         </div>
@@ -34,7 +37,7 @@ const PortfolioCard = () => {
 
   return (
     <div className="glass-card p-6 rounded-lg mb-8 animate-fade-in">
-      <h2 className="text-xl font-semibold mb-6">Bitcoin Performance</h2>
+      <h2 className="text-xl font-semibold mb-6">{t("chart.performance")}</h2>
       <div className="w-full h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={priceData}>
