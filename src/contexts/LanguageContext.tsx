@@ -19,7 +19,7 @@ export const languages = {
 type LanguageContextType = {
   language: string;
   setLanguage: (lang: string) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string | undefined>) => string;
 };
 
 // Create the context with default values
@@ -35,6 +35,12 @@ const translations: Record<string, Record<string, string>> = {
     // Dashboard
     "dashboard.title": "Crypto Dashboard",
     "dashboard.welcome": "Welcome back to your portfolio",
+    "dashboard.welcomeUser": "Welcome back, {name}",
+    
+    // Auth
+    "auth.login": "Login",
+    "auth.register": "Register",
+    "profile.title": "Profile",
     
     // Market Stats
     "market.cap": "Market Cap",
@@ -58,6 +64,10 @@ const translations: Record<string, Record<string, string>> = {
   es: {
     "dashboard.title": "Panel de Criptomonedas",
     "dashboard.welcome": "Bienvenido de nuevo a tu portafolio",
+    "dashboard.welcomeUser": "Bienvenido de nuevo, {name}",
+    "auth.login": "Iniciar Sesión",
+    "auth.register": "Registrarse",
+    "profile.title": "Perfil",
     "market.cap": "Cap. de Mercado",
     "market.volume": "Volumen 24h",
     "market.dominance": "Dominancia BTC",
@@ -206,9 +216,21 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [language]);
 
   // Translation function
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, string | undefined>): string => {
     if (!translations[language]) return key;
-    return translations[language][key] || translations.en[key] || key;
+    
+    let text = translations[language][key] || translations.en[key] || key;
+    
+    // Replace parameters in the translation string if provided
+    if (params) {
+      Object.entries(params).forEach(([paramKey, paramValue]) => {
+        if (paramValue !== undefined) {
+          text = text.replace(`{${paramKey}}`, paramValue);
+        }
+      });
+    }
+    
+    return text;
   };
 
   return (
