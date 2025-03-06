@@ -2,22 +2,51 @@
 import { ArrowUpIcon, ArrowDownIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect } from "react";
+import CryptoSelector from "./CryptoSelector";
 
-const fetchCryptoData = async () => {
-  const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&page=1&sparkline=false');
+const fetchCryptoData = async (cryptoIds: string[]) => {
+  if (!cryptoIds.length) return [];
+  
+  const idsParam = cryptoIds.join(",");
+  const response = await fetch(
+    `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${idsParam}&order=market_cap_desc&per_page=20&page=1&sparkline=false`
+  );
   if (!response.ok) {
-    throw new Error('Network response was not ok');
+    throw new Error("Network response was not ok");
   }
   return response.json();
 };
 
 const CryptoList = () => {
   const { t } = useLanguage();
+  const { user, isAuthenticated, updateUserPreferences } = useAuth();
+  const [selectedCryptoIds, setSelectedCryptoIds] = useState<string[]>(['bitcoin', 'ethereum', 'ripple', 'cardano', 'solana']);
+  
+  // Initialize from user preferences if logged in
+  useEffect(() => {
+    if (isAuthenticated && user?.preferences.selectedCryptos) {
+      setSelectedCryptoIds(user.preferences.selectedCryptos);
+    }
+  }, [isAuthenticated, user]);
+  
   const { data: cryptos, isLoading } = useQuery({
-    queryKey: ['cryptos'],
-    queryFn: fetchCryptoData,
+    queryKey: ['cryptos', selectedCryptoIds],
+    queryFn: () => fetchCryptoData(selectedCryptoIds),
     refetchInterval: 30000, // Refetch every 30 seconds
+    enabled: selectedCryptoIds.length > 0,
   });
+
+  const handleAddCrypto = (crypto: any) => {
+    const updatedCryptos = [...selectedCryptoIds, crypto.id];
+    setSelectedCryptoIds(updatedCryptos);
+    
+    // Update user preferences if logged in
+    if (isAuthenticated) {
+      updateUserPreferences({ selectedCryptos: updatedCryptos });
+    }
+  };
 
   if (isLoading) {
     return <div className="glass-card rounded-lg p-6 animate-pulse">Loading...</div>;
@@ -25,7 +54,14 @@ const CryptoList = () => {
 
   return (
     <div className="glass-card rounded-lg p-6 animate-fade-in">
-      <h2 className="text-xl font-semibold mb-6">{t("crypto.list.title")}</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold">{t("crypto.list.title")}</h2>
+        <CryptoSelector 
+          onSelectCrypto={handleAddCrypto} 
+          selectedCryptos={selectedCryptoIds}
+        />
+      </div>
+      
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>

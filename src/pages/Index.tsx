@@ -5,9 +5,14 @@ import PortfolioCard from "@/components/PortfolioCard";
 import CryptoList from "@/components/CryptoList";
 import LanguageSelector from "@/components/LanguageSelector";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { UserIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { t } = useLanguage();
+  const { isAuthenticated, user } = useAuth();
 
   return (
     <div className="min-h-screen bg-background p-8">
@@ -15,9 +20,32 @@ const Index = () => {
         <header className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2">{t("dashboard.title")}</h1>
-            <p className="text-muted-foreground">{t("dashboard.welcome")}</p>
+            <p className="text-muted-foreground">
+              {isAuthenticated 
+                ? t("dashboard.welcomeUser", { name: user?.name }) 
+                : t("dashboard.welcome")}
+            </p>
           </div>
-          <LanguageSelector />
+          <div className="flex items-center space-x-4">
+            <LanguageSelector />
+            {isAuthenticated ? (
+              <Button variant="outline" asChild>
+                <Link to="/profile">
+                  <UserIcon className="mr-2 h-4 w-4" />
+                  {t("profile.title")}
+                </Link>
+              </Button>
+            ) : (
+              <div className="flex space-x-2">
+                <Button variant="outline" asChild>
+                  <Link to="/login">{t("auth.login")}</Link>
+                </Button>
+                <Button asChild>
+                  <Link to="/register">{t("auth.register")}</Link>
+                </Button>
+              </div>
+            )}
+          </div>
         </header>
         
         <MarketStats />
