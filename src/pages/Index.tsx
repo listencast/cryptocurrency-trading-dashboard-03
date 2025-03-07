@@ -26,11 +26,11 @@ const Index = () => {
             />
             <div>
               <h1 className="text-3xl font-bold mb-2">{t("dashboard.title")}</h1>
-              <p className="text-muted-foreground">
-                {isAuthenticated 
-                  ? t("dashboard.welcomeUser", { name: user?.name }) 
-                  : t("dashboard.welcome")}
-              </p>
+              {isAuthenticated && (
+                <p className="text-muted-foreground">
+                  {t("dashboard.welcomeUser", { name: user?.name })}
+                </p>
+              )}
             </div>
           </div>
           <div className="flex items-center space-x-4">
