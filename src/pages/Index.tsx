@@ -22,7 +22,7 @@ const Index = () => {
             <img 
               src="/lovable-uploads/2fa20fda-d6b2-4987-b280-b7fc9d9a7fa4.png" 
               alt="The Coin Bee Logo" 
-              className="h-12 mr-4"
+              className="h-24 mr-4"
             />
             <div>
               <h1 className="text-3xl font-bold mb-2">{t("dashboard.title")}</h1>
