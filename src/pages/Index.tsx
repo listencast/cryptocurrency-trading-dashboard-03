@@ -18,13 +18,20 @@ const Index = () => {
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">{t("dashboard.title")}</h1>
-            <p className="text-muted-foreground">
-              {isAuthenticated 
-                ? t("dashboard.welcomeUser", { name: user?.name }) 
-                : t("dashboard.welcome")}
-            </p>
+          <div className="flex items-center">
+            <img 
+              src="/lovable-uploads/2fa20fda-d6b2-4987-b280-b7fc9d9a7fa4.png" 
+              alt="The Coin Bee Logo" 
+              className="h-12 mr-4"
+            />
+            <div>
+              <h1 className="text-3xl font-bold mb-2">{t("dashboard.title")}</h1>
+              <p className="text-muted-foreground">
+                {isAuthenticated 
+                  ? t("dashboard.welcomeUser", { name: user?.name }) 
+                  : t("dashboard.welcome")}
+              </p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             <LanguageSelector />
